@@ -19,6 +19,7 @@
         <module>mall-mbg</module>
         <module>mall-common</module>
         <module>mall-admin</module>
+        <module>mall-security</module>
     </modules>
 
     <properties>
@@ -104,11 +105,11 @@
                 <version>${mall-mbg.version}</version>
             </dependency>
             <!--mall安全模块-->
-<!--            <dependency>-->
-<!--                <groupId>com.macro.mall</groupId>-->
-<!--                <artifactId>mall-security</artifactId>-->
-<!--                <version>${mall-security.version}</version>-->
-<!--            </dependency>-->
+            <dependency>
+                <groupId>com.lqs.mall</groupId>
+                <artifactId>mall-security</artifactId>
+                <version>${mall-security.version}</version>
+            </dependency>
             <!--MyBatis分页插件starter-->
             <dependency>
                 <groupId>com.github.pagehelper</groupId>
