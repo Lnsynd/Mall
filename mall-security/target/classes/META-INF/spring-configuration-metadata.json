@@ -1,0 +1,17 @@
+{
+  "groups": [
+    {
+      "name": "secure.ignored",
+      "type": "com.lqs.mall.mall.config.IgnoredUrlsConfig",
+      "sourceType": "com.lqs.mall.mall.config.IgnoredUrlsConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "secure.ignored.urls",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.lqs.mall.mall.config.IgnoredUrlsConfig"
+    }
+  ],
+  "hints": []
+}
