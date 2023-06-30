@@ -42,3 +42,5 @@ secure:
       - /**/*.png
       - /**/*.map
       - /favicon.ico
+      - /admin/login
+      - /admin/register
