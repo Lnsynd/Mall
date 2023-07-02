@@ -2,6 +2,7 @@ package com.lqs.mall.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.lqs.mall.common.service.RedisService;
+import com.lqs.mall.dao.UmsAdminRoleRelationDao;
 import com.lqs.mall.mapper.UmsAdminRoleRelationMapper;
 import com.lqs.mall.model.UmsAdmin;
 import com.lqs.mall.model.UmsAdminRoleRelation;
@@ -25,6 +26,9 @@ public class UmsAdminCacheServiceImpl implements UmsAdminCacheService {
 
     @Autowired
     private UmsAdminRoleRelationMapper adminRoleRelationMapper;
+
+    @Autowired
+    private UmsAdminRoleRelationDao adminRoleRelationDao;
 
     @Autowired
     private RedisService redisService;
@@ -108,6 +112,17 @@ public class UmsAdminCacheServiceImpl implements UmsAdminCacheService {
         if (CollUtil.isNotEmpty(relationList)) {
             String keyPrefix = REDIS_DATABASE + ":" + REDIS_KEY_RESOURCE_LIST + ":";
             List<String> keys = relationList.stream().map(relation -> keyPrefix + relation.getAdminId()).collect(Collectors.toList());
+            redisService.del(keys);
+        }
+    }
+
+    @Override
+    public void delResourceListByResource(Long resourceId) {
+        // 获取与 该资源 有关系的用户
+        List<Long> adminIdList = adminRoleRelationDao.getAdminIdList(resourceId);
+        if (CollUtil.isNotEmpty(adminIdList)) {
+            String keyPrefix = REDIS_DATABASE + ":" + REDIS_KEY_RESOURCE_LIST + ":";
+            List<String> keys = adminIdList.stream().map(id -> keyPrefix + id).collect(Collectors.toList());
             redisService.del(keys);
         }
     }

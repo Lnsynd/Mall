@@ -26,4 +26,9 @@ public interface UmsAdminRoleRelationDao {
      * 批量插入用户角色关系
      */
     int insertList(@Param("list") List<UmsAdminRoleRelation> list);
+
+    /**
+     *  查找与resourceId有关的 用户id
+     */
+    List<Long> getAdminIdList(@Param("resourceId") Long resourceId);
 }

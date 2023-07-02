@@ -31,4 +31,11 @@
             left join ums_role r on r.id = arr.role_id
         where arr.admin_id = #{adminId}
     </select>
+    <select id="getAdminIdList" resultType="java.lang.Long">
+        select
+            DISTINCT ar.admin_id
+        from ums_role_resource_relation rrr
+            left join ums_admin_role_relation ar on ar.role_id = rrr.role_id
+        where rrr.resource_id = #{resourceId}
+    </select>
 </mapper>
