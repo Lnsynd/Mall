@@ -30,5 +30,13 @@ public interface UmsAdminCacheService {
      */
     void setResourceList(Long adminId,List<UmsResource> resourceList);
 
+    /**
+     * 删除后台用户缓存
+     */
     void delAdmin(Long id);
+
+    /**
+     * 删除后台用户资源列表缓存
+     */
+    void delResourceList(Long id);
 }

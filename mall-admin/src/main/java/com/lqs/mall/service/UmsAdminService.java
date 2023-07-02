@@ -1,10 +1,12 @@
 package com.lqs.mall.service;
 
 import com.lqs.mall.dto.UmsAdminParam;
+import com.lqs.mall.dto.UpdateAdminPasswordParam;
 import com.lqs.mall.model.UmsAdmin;
 import com.lqs.mall.model.UmsResource;
 import com.lqs.mall.model.UmsRole;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
@@ -71,7 +73,24 @@ public interface UmsAdminService {
     int update(Long id, UmsAdmin admin);
 
     /**
+     * 修改用户密码
+     */
+    int updatePassword(UpdateAdminPasswordParam updatePasswordParam);
+
+    /**
      * 获取缓存服务
      */
     UmsAdminCacheService getCacheService();
+
+
+    /**
+     * 根据id删除用户信息
+     */
+    int delete(Long id);
+
+    /**
+     * 修改用户角色关系
+     */
+    @Transactional
+    int updateRole(Long adminId, List<Long> roleIds);
 }

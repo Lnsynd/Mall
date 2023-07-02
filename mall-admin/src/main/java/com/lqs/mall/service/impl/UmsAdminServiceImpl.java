@@ -9,12 +9,15 @@ import com.lqs.mall.common.exception.Asserts;
 import com.lqs.mall.common.util.RequestUtil;
 import com.lqs.mall.dao.UmsAdminRoleRelationDao;
 import com.lqs.mall.dto.UmsAdminParam;
+import com.lqs.mall.dto.UpdateAdminPasswordParam;
 import com.lqs.mall.mall.utils.JwtTokenUtil;
 import com.lqs.mall.mapper.UmsAdminLoginLogMapper;
 import com.lqs.mall.mapper.UmsAdminMapper;
+import com.lqs.mall.mapper.UmsAdminRoleRelationMapper;
 import com.lqs.mall.model.*;
 import com.lqs.mall.service.UmsAdminCacheService;
 import com.lqs.mall.service.UmsAdminService;
+import org.mybatis.generator.internal.util.StringUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -31,6 +34,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,6 +47,8 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UmsAdminServiceImpl.class);
 
+    @Autowired
+    private UmsAdminRoleRelationMapper adminRoleRelationMapper;
 
     @Autowired
     private UmsAdminLoginLogMapper loginLogMapper;
@@ -187,7 +193,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         resourceList = adminRoleRelationDao.getResourceList(adminId);
         if (CollUtil.isNotEmpty(resourceList)) {
             //  存入缓存中
-            getCacheService().setResourceList(adminId,resourceList);
+            getCacheService().setResourceList(adminId, resourceList);
         }
         return resourceList;
     }
@@ -244,6 +250,66 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         int count = adminMapper.updateByPrimaryKeySelective(admin);
         // 缓存中删除该id用户信息
         getCacheService().delAdmin(id);
+        return count;
+    }
+
+    @Override
+    public int updatePassword(UpdateAdminPasswordParam param) {
+        // 信息不完整返回      -1
+        if (StrUtil.isEmpty(param.getUsername())
+                || StrUtil.isEmpty(param.getNewPassword())
+                || StrUtil.isEmpty(param.getOldPassword())) {
+            return -1;
+        }
+        // 查询该用户
+        UmsAdminExample example = new UmsAdminExample();
+        UmsAdminExample.Criteria criteria = example.createCriteria();
+        criteria.andUsernameEqualTo(param.getUsername());
+        List<UmsAdmin> adminList = adminMapper.selectByExample(example);
+        // 不存在该用户 返回    -2
+        if (CollUtil.isEmpty(adminList)) {
+            return -2;
+        }
+        // 密码不匹配   返回    -3
+        UmsAdmin umsAdmin = adminList.get(0);
+        if (!passwordEncoder.matches(param.getOldPassword(), umsAdmin.getPassword())) {
+            return -3;
+        }
+        // 成功修改返回           1
+        umsAdmin.setPassword(passwordEncoder.encode(param.getNewPassword()));
+        adminMapper.updateByPrimaryKey(umsAdmin);
+        getCacheService().delAdmin(umsAdmin.getId());
+        return 1;
+    }
+
+    @Override
+    public int delete(Long id) {
+        getCacheService().delAdmin(id);
+        int count = adminMapper.deleteByPrimaryKey(id);
+        getCacheService().delResourceList(id);
+        return count;
+    }
+
+
+    @Override
+    public int updateRole(Long adminId, List<Long> roleIds) {
+        int count = roleIds == null ? 0 : roleIds.size();
+        // 删除旧的 用户-角色 关系
+        UmsAdminRoleRelationExample example = new UmsAdminRoleRelationExample();
+        example.createCriteria().andAdminIdEqualTo(adminId);
+        adminRoleRelationMapper.deleteByExample(example);
+        // 添加新的关系
+        if(CollUtil.isNotEmpty(roleIds)){
+            List<UmsAdminRoleRelation> list = new ArrayList<>();
+            for(Long roleId:roleIds){
+                UmsAdminRoleRelation roleRelation = new UmsAdminRoleRelation();
+                roleRelation.setAdminId(adminId);
+                roleRelation.setRoleId(roleId);
+                list.add(roleRelation);
+            }
+            adminRoleRelationDao.insertList(list);
+        }
+        getCacheService().delResourceList(adminId);
         return count;
     }
 

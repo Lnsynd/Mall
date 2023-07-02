@@ -68,4 +68,10 @@ public class UmsAdminCacheServiceImpl implements UmsAdminCacheService {
             redisService.del(key);
         }
     }
+
+    @Override
+    public void delResourceList(Long id) {
+        String key = REDIS_DATABASE + ":" + REDIS_KEY_RESOURCE_LIST + ":" + id;
+        redisService.del(key);
+    }
 }
