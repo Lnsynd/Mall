@@ -1,9 +1,8 @@
 package com.lqs.mall.mall.config;
 
-import com.lqs.mall.mall.component.JwtAuthenticationTokenFilter;
-import com.lqs.mall.mall.component.RestAuthenticationEntryPoint;
-import com.lqs.mall.mall.component.RestfulAccessDeniedHandler;
+import com.lqs.mall.mall.component.*;
 import com.lqs.mall.mall.utils.JwtTokenUtil;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -43,5 +42,23 @@ public class CommonSecurityConfig {
     @Bean
     public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter(){
         return new JwtAuthenticationTokenFilter();
+    }
+
+    @ConditionalOnBean(name = "dynamicSecurityService")
+    @Bean
+    public DynamicAccessDecisionManager dynamicAccessDecisionManager() {
+        return new DynamicAccessDecisionManager();
+    }
+
+    @ConditionalOnBean(name = "dynamicSecurityService")
+    @Bean
+    public DynamicSecurityMetadataSource dynamicSecurityMetadataSource() {
+        return new DynamicSecurityMetadataSource();
+    }
+
+    @ConditionalOnBean(name = "dynamicSecurityService")
+    @Bean
+    public DynamicSecurityFilter dynamicSecurityFilter(){
+        return new DynamicSecurityFilter();
     }
 }

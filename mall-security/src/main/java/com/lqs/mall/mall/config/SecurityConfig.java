@@ -1,8 +1,6 @@
 package com.lqs.mall.mall.config;
 
-import com.lqs.mall.mall.component.JwtAuthenticationTokenFilter;
-import com.lqs.mall.mall.component.RestAuthenticationEntryPoint;
-import com.lqs.mall.mall.component.RestfulAccessDeniedHandler;
+import com.lqs.mall.mall.component.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
@@ -34,6 +33,12 @@ public class SecurityConfig{
 
     @Autowired
     private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+
+    @Autowired(required = false)
+    private DynamicSecurityService dynamicSecurityService;
+
+    @Autowired(required = false)
+    private DynamicSecurityFilter dynamicSecurityFilter;
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -65,7 +70,10 @@ public class SecurityConfig{
                 // 自定义权限拦截器JWT过滤器
                 .and()
                 .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
-
+        //有动态权限配置时添加动态权限校验过滤器
+        if(dynamicSecurityService!=null){
+            registry.and().addFilterBefore(dynamicSecurityFilter, FilterSecurityInterceptor.class);
+        }
         return httpSecurity.build();
     }
 }
