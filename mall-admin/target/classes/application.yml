@@ -42,5 +42,9 @@ secure:
       - /**/*.png
       - /**/*.map
       - /favicon.ico
+      - /actuator/**
+      - /druid/**
       - /admin/login
       - /admin/register
+      - /admin/info
+      - /admin/logout

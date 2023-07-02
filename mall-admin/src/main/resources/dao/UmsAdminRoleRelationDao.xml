@@ -17,4 +17,11 @@
         AND ur.id is not null
         GROUP BY ur.id
     </select>
+    <select id="getRoleList" resultType="com.lqs.mall.model.UmsRole">
+        select
+            r.*
+        from ums_admin_role_relation arr
+            left join ums_role r on r.id = arr.role_id
+        where arr.admin_id = #{adminId}
+    </select>
 </mapper>

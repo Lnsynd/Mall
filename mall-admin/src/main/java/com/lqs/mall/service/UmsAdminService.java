@@ -28,7 +28,6 @@ public interface UmsAdminService {
     /**
      * 用户登录
      */
-
     String login(String username, String password);
 
 
@@ -49,4 +48,30 @@ public interface UmsAdminService {
     UserDetails loadUserByUsername(String username);
 
 
+    /**
+     * 更新token信息
+     */
+    String refreshToken(String oldToken);
+
+    /**
+     * 后台获取用户列表
+     */
+    List<UmsAdmin> list(String keyword, Integer pageSize, Integer pageNum);
+
+    /**
+     * 根据id获取用户
+     */
+    UmsAdmin getItem(Long id);
+
+    /**
+     * 修改用户信息
+     * @param id id
+     * @param admin 要修改的条件
+     */
+    int update(Long id, UmsAdmin admin);
+
+    /**
+     * 获取缓存服务
+     */
+    UmsAdminCacheService getCacheService();
 }

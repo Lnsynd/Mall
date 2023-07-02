@@ -1,6 +1,7 @@
 package com.lqs.mall.dao;
 
 import com.lqs.mall.model.UmsResource;
+import com.lqs.mall.model.UmsRole;
 import io.lettuce.core.dynamic.annotation.Param;
 
 import java.util.List;
@@ -10,5 +11,13 @@ import java.util.List;
  * Created by 刘千山 on 2023/6/30/030-15:37
  */
 public interface UmsAdminRoleRelationDao {
+    /**
+     * 获取用户所有可访问资源
+     */
     List<UmsResource> getResourceList(@Param("adminId") Long adminId);
+
+    /**
+     * 获取用于所有角色
+     */
+    List<UmsRole> getRoleList(@Param("adminId")Long adminId);
 }
