@@ -29,6 +29,7 @@ public class DynamicSecurityFilter extends AbstractSecurityInterceptor implement
 
 
     // 使用自定义 决策管理器
+    @Autowired
     public void setMyAccessDecisionManager(DynamicAccessDecisionManager decisionManager){
         super.setAccessDecisionManager(decisionManager);
     }
