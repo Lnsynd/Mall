@@ -11,6 +11,7 @@
         <module name="mall-common" />
         <module name="mall-admin" />
         <module name="mall-mbg" />
+        <module name="mall-portal" />
       </profile>
     </annotationProcessing>
   </component>
@@ -20,6 +21,7 @@
       <module name="mall-admin" options="-parameters" />
       <module name="mall-common" options="-parameters" />
       <module name="mall-mbg" options="-parameters" />
+      <module name="mall-portal" options="-parameters" />
       <module name="mall-security" options="-parameters" />
     </option>
   </component>
