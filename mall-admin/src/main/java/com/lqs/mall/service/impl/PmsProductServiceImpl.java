@@ -34,8 +34,6 @@ public class PmsProductServiceImpl implements PmsProductService {
     private static final Logger LOGGER = LoggerFactory.getLogger(PmsProductServiceImpl.class);
 
     @Autowired
-    private PmsProductService productService;
-    @Autowired
     private PmsProductFullReductionDao productFullReductionDao;
     @Autowired
     private PmsProductFullReductionMapper productFullReductionMapper;
