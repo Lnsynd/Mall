@@ -1,6 +1,9 @@
 package com.lqs.mall.dao;
 
+import com.lqs.mall.domain.CartProduct;
+import com.lqs.mall.domain.PromotionProduct;
 import com.lqs.mall.model.SmsCoupon;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,5 +17,15 @@ public interface PortalProductDao {
      * @param id 商品id
      * @param productCategoryId 商品分类id
      */
-    List<SmsCoupon> getAvailableCouponList(Long id, Long productCategoryId);
+    List<SmsCoupon> getAvailableCouponList(@Param("id")Long id, Long productCategoryId);
+
+    /**
+     * 获取促销商品信息列表
+     */
+    List<PromotionProduct> getPromotionProductList(@Param("ids")List<Long> productIdList);
+
+    /**
+     * 获取指定商品的属性和规格信息
+     */
+    CartProduct getCartProduct(@Param("id")Long productId);
 }
