@@ -177,6 +177,15 @@ public class UmsMemberServiceImpl implements UmsMemberService {
         return jwtTokenUtil.refreshHeadToken(token);
     }
 
+    @Override
+    public void updateIntegration(Long id, int integration) {
+        UmsMember record=new UmsMember();
+        record.setId(id);
+        record.setIntegration(integration);
+        memberMapper.updateByPrimaryKeySelective(record);
+        memberCacheService.delMember(id);
+    }
+
     private boolean verifyAuthCode(String authCode, String telephone) {
         if (StrUtil.isEmpty(authCode)) {
             return false;

@@ -60,4 +60,9 @@ public interface UmsMemberService {
      * 刷新token
      */
     String refreshToken(String token);
+
+    /**
+     * 根据会员id修改会员积分
+     */
+    void updateIntegration(Long id, int integration);
 }
