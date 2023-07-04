@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lqs.mall.dao.HomeDao">
+    <resultMap id="flashPromotionProduct" type="com.lqs.mall.domain.FlashPromotionProduct"
+               extends="com.lqs.mall.mapper.PmsProductMapper.BaseResultMap">
+        <result column="flash_promotion_price" property="flashPromotionPrice"/>
+        <result column="flash_promotion_count" property="flashPromotionCount"/>
+        <result column="flash_promotion_limit" property="flashPromotionLimit"/>
+    </resultMap>
+    <select id="getRecommendBrandList" resultMap="flashPromotionProduct">
+        SELECT b.*
+        FROM
+            sms_home_brand hb
+                LEFT JOIN pms_brand b ON hb.brand_id = b.id
+        WHERE
+            hb.recommend_status = 1
+          AND b.show_status = 1
+        ORDER BY
+            hb.sort DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+</mapper>
