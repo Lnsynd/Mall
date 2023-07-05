@@ -6,7 +6,7 @@
         <association property="product" resultMap="com.lqs.mall.mapper.PmsProductMapper.BaseResultMap"
                      columnPrefix="p_"/>
     </resultMap>
-    <select id="getList" resultType="com.lqs.mall.dto.SmsFlashPromotionProduct">
+    <select id="getList" resultMap="flashProductMap">
         SELECT
             r.id,
             r.flash_promotion_price,

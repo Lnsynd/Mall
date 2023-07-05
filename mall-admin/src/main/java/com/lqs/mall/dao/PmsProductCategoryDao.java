@@ -9,5 +9,8 @@ import java.util.List;
  * Created by 刘千山 on 2023/7/3/003-15:30
  */
 public interface PmsProductCategoryDao {
+    /**
+     * 查询商品分类及其子分类
+     */
     List<PmsProductCategoryWithChildrenItem> listWithChildren();
 }
