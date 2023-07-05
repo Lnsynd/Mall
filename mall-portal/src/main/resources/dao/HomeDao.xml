@@ -19,4 +19,53 @@
             hb.sort DESC
         LIMIT #{offset}, #{limit}
     </select>
+    <select id="getNewProductList" resultType="com.lqs.mall.model.PmsProduct">
+        SELECT p.*
+        FROM
+            sms_home_new_product hp
+                LEFT JOIN pms_product p ON hp.product_id = p.id
+        WHERE
+            hp.recommend_status = 1
+          AND p.publish_status = 1
+        ORDER BY
+            hp.sort DESC
+        LIMIT #{offset}, #{limit};
+    </select>
+    <select id="getHotProductList" resultType="com.lqs.mall.model.PmsProduct">
+        SELECT p.*
+        FROM
+            sms_home_recommend_product hp
+                LEFT JOIN pms_product p ON hp.product_id = p.id
+        WHERE
+            hp.recommend_status = 1
+          AND p.publish_status = 1
+        ORDER BY
+            hp.sort DESC
+        LIMIT #{offset}, #{limit};
+    </select>
+    <select id="getRecommendSubjectList" resultType="com.lqs.mall.model.CmsSubject">
+        SELECT s.*
+        FROM
+            sms_home_recommend_subject hs
+                LEFT JOIN cms_subject s ON hs.subject_id = s.id
+        WHERE
+            hs.recommend_status = 1
+          AND s.show_status = 1
+        ORDER BY
+            hs.sort DESC
+        LIMIT #{offset}, #{limit};
+    </select>
+    <select id="getFlashProductList" resultMap="flashPromotionProduct">
+        SELECT
+            pr.flash_promotion_price,
+            pr.flash_promotion_count,
+            pr.flash_promotion_limit,
+            p.*
+        FROM
+            sms_flash_promotion_product_relation pr
+                LEFT JOIN pms_product p ON pr.product_id = p.id
+        WHERE
+            pr.flash_promotion_id = #{flashPromotionId}
+          AND pr.flash_promotion_session_id = #{sessionId}
+    </select>
 </mapper>
