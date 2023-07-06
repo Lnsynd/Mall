@@ -65,11 +65,9 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
     private OmsOrderItemMapper orderItemMapper;
     @Override
     public ConfirmOrderResult generateConfirmOrder(List<Long> cartIds) {
-        // 新建一个确认单
         ConfirmOrderResult result = new ConfirmOrderResult();
-        // 获取购物车信息
+        //获取购物车信息
         UmsMember currentMember = memberService.getCurrentMember();
-        // 获取购物车优惠列表(存放购物车每个物品的优惠信息)
         List<CartPromotionItem> cartPromotionItemList = cartItemService.listPromotion(currentMember.getId(), cartIds);
         result.setCartPromotionItemList(cartPromotionItemList);
         //获取用户收货地址列表

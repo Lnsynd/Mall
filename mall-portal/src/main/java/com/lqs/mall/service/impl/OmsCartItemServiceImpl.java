@@ -42,20 +42,20 @@ public class OmsCartItemServiceImpl implements OmsCartItemService {
     @Override
     public int add(OmsCartItem cartItem) {
         // 先给购物车的物品赋值
-        int count = 0;
+        int count;
         UmsMember currentMember = memberService.getCurrentMember();
-        cartItem.setMemberId(cartItem.getMemberId());
-        cartItem.setMemberNickname(cartItem.getMemberNickname());
+        cartItem.setMemberId(currentMember.getId());
+        cartItem.setMemberNickname(currentMember.getNickname());
         cartItem.setDeleteStatus(0);
         // 查看购物车是否存在该物品
         OmsCartItem existedItem = getCartItem(cartItem);
         // 如果不存在，则加入
         if (existedItem == null) {
             cartItem.setCreateDate(new Date());
-            cartItemMapper.insert(cartItem);
+            count = cartItemMapper.insert(cartItem);
         } else {
             // 如果存在 ，则数量增加
-            existedItem.setModifyDate(new Date());
+            cartItem.setModifyDate(new Date());
             existedItem.setQuantity(existedItem.getQuantity() + cartItem.getQuantity());
             count = cartItemMapper.updateByPrimaryKey(existedItem);
         }

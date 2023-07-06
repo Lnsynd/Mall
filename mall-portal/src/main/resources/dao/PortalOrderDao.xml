@@ -26,7 +26,7 @@
             #{item.productSkuId}
         </foreach>
     </update>
-    <select id="getDetail" resultType="com.lqs.mall.domain.OmsOrderDetail">
+    <select id="getDetail" resultMap="orderDetailMap">
         SELECT
             o.id,
             o.order_sn,
@@ -58,7 +58,7 @@
             #{item.productSkuId}
         </foreach>
     </update>
-    <select id="getTimeOutOrders" resultType="com.lqs.mall.domain.OmsOrderDetail">
+    <select id="getTimeOutOrders" resultMap="orderDetailMap">
         SELECT
             o.id,
             o.order_sn,

@@ -17,7 +17,7 @@ public interface PortalProductDao {
      * @param id 商品id
      * @param productCategoryId 商品分类id
      */
-    List<SmsCoupon> getAvailableCouponList(@Param("id")Long id, Long productCategoryId);
+    List<SmsCoupon> getAvailableCouponList(@Param("productId") Long id,@Param("productCategoryId")  Long productCategoryId);
 
     /**
      * 获取促销商品信息列表

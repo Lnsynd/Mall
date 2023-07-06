@@ -7,7 +7,7 @@
         <result column="flash_promotion_count" property="flashPromotionCount"/>
         <result column="flash_promotion_limit" property="flashPromotionLimit"/>
     </resultMap>
-    <select id="getRecommendBrandList" resultMap="flashPromotionProduct">
+    <select id="getRecommendBrandList" resultMap="com.lqs.mall.mapper.PmsBrandMapper.BaseResultMap">
         SELECT b.*
         FROM
             sms_home_brand hb

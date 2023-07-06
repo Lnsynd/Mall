@@ -41,8 +41,7 @@ public class UmsMemberCouponServiceImpl implements UmsMemberCouponService {
     private SmsCouponHistoryDao couponHistoryDao;
 
     @Override
-    public List<SmsCouponHistoryDetail> listCart(List<CartPromotionItem> cartPromotionItemList, Integer type) {
-        // 获取当前用户
+    public List<SmsCouponHistoryDetail> listCart(List<CartPromotionItem> cartItemList, Integer type) {
         UmsMember currentMember = memberService.getCurrentMember();
         Date now = new Date();
         //获取该用户所有优惠券
@@ -50,54 +49,51 @@ public class UmsMemberCouponServiceImpl implements UmsMemberCouponService {
         //根据优惠券使用类型来判断优惠券是否可用
         List<SmsCouponHistoryDetail> enableList = new ArrayList<>();
         List<SmsCouponHistoryDetail> disableList = new ArrayList<>();
-        // 遍历领取过的优惠券
         for (SmsCouponHistoryDetail couponHistoryDetail : allList) {
-            // 获取使用类型
             Integer useType = couponHistoryDetail.getCoupon().getUseType();
-            // 是否无门槛
             BigDecimal minPoint = couponHistoryDetail.getCoupon().getMinPoint();
             Date endTime = couponHistoryDetail.getCoupon().getEndTime();
-            if (useType.equals(0)) {
+            if(useType.equals(0)){
                 //0->全场通用
                 //判断是否满足优惠起点
                 //计算购物车商品的总价
-                BigDecimal totalAmount = calcTotalAmount(cartPromotionItemList);
-                if (now.before(endTime) && totalAmount.subtract(minPoint).intValue() >= 0) {
+                BigDecimal totalAmount = calcTotalAmount(cartItemList);
+                if(now.before(endTime)&&totalAmount.subtract(minPoint).intValue()>=0){
                     enableList.add(couponHistoryDetail);
-                } else {
+                }else{
                     disableList.add(couponHistoryDetail);
                 }
-            } else if (useType.equals(1)) {
+            }else if(useType.equals(1)){
                 //1->指定分类
                 //计算指定分类商品的总价
                 List<Long> productCategoryIds = new ArrayList<>();
                 for (SmsCouponProductCategoryRelation categoryRelation : couponHistoryDetail.getCategoryRelationList()) {
                     productCategoryIds.add(categoryRelation.getProductCategoryId());
                 }
-                BigDecimal totalAmount = calcTotalAmountByproductCategoryId(cartPromotionItemList, productCategoryIds);
-                if (now.before(endTime) && totalAmount.intValue() > 0 && totalAmount.subtract(minPoint).intValue() >= 0) {
+                BigDecimal totalAmount = calcTotalAmountByproductCategoryId(cartItemList,productCategoryIds);
+                if(now.before(endTime)&&totalAmount.intValue()>0&&totalAmount.subtract(minPoint).intValue()>=0){
                     enableList.add(couponHistoryDetail);
-                } else {
+                }else{
                     disableList.add(couponHistoryDetail);
                 }
-            } else if (useType.equals(2)) {
+            }else if(useType.equals(2)){
                 //2->指定商品
                 //计算指定商品的总价
                 List<Long> productIds = new ArrayList<>();
                 for (SmsCouponProductRelation productRelation : couponHistoryDetail.getProductRelationList()) {
                     productIds.add(productRelation.getProductId());
                 }
-                BigDecimal totalAmount = calcTotalAmountByProductId(cartPromotionItemList, productIds);
-                if (now.before(endTime) && totalAmount.intValue() > 0 && totalAmount.subtract(minPoint).intValue() >= 0) {
+                BigDecimal totalAmount = calcTotalAmountByProductId(cartItemList,productIds);
+                if(now.before(endTime)&&totalAmount.intValue()>0&&totalAmount.subtract(minPoint).intValue()>=0){
                     enableList.add(couponHistoryDetail);
-                } else {
+                }else{
                     disableList.add(couponHistoryDetail);
                 }
             }
         }
-        if (type.equals(1)) {
+        if(type.equals(1)){
             return enableList;
-        } else {
+        }else{
             return disableList;
         }
     }

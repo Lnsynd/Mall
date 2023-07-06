@@ -21,7 +21,7 @@ import java.util.Map;
  * 前台-订单管理Controller
  * Created by 刘千山 on 2023/7/4/004-17:40
  */
-@Controller
+@RestController
 @Api(tags = "OmsPortalOrderController")
 @Tag(name = "OmsPortalOrderController", description = "订单管理")
 @RequestMapping("/order")

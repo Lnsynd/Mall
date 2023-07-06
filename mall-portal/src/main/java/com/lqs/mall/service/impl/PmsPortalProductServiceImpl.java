@@ -1,5 +1,6 @@
 package com.lqs.mall.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.lqs.mall.dao.PortalProductDao;
@@ -85,48 +86,49 @@ public class PmsPortalProductServiceImpl implements PmsPortalProductService {
 
     @Override
     public PmsPortalProductDetail detail(Long id) {
-        PmsPortalProductDetail res = new PmsPortalProductDetail();
-        // 获取商品信息
+        PmsPortalProductDetail result = new PmsPortalProductDetail();
+        //获取商品信息
         PmsProduct product = productMapper.selectByPrimaryKey(id);
-        res.setProduct(product);
-        // 获取品牌信息
+        result.setProduct(product);
+        //获取品牌信息
         PmsBrand brand = brandMapper.selectByPrimaryKey(product.getBrandId());
-        res.setBrand(brand);
+        result.setBrand(brand);
         //获取商品属性信息
         PmsProductAttributeExample attributeExample = new PmsProductAttributeExample();
         attributeExample.createCriteria().andProductAttributeCategoryIdEqualTo(product.getProductAttributeCategoryId());
         List<PmsProductAttribute> productAttributeList = productAttributeMapper.selectByExample(attributeExample);
-        res.setProductAttributeList(productAttributeList);
-        // 获取商品属性值信息
-        // 获取全部属性id
-        List<Long> attrIds = productAttributeList.stream().map(PmsProductAttribute::getId).collect(Collectors.toList());
-        PmsProductAttributeValueExample attributeValueExample = new PmsProductAttributeValueExample();
-        attributeValueExample.createCriteria().andProductIdEqualTo(product.getId())
-                .andProductAttributeIdIn(attrIds);
-        List<PmsProductAttributeValue> productAttributeValueList = productAttributeValueMapper.selectByExample(attributeValueExample);
-        res.setProductAttributeValueList(productAttributeValueList);
+        result.setProductAttributeList(productAttributeList);
+        //获取商品属性值信息
+        if(CollUtil.isNotEmpty(productAttributeList)){
+            List<Long> attributeIds = productAttributeList.stream().map(PmsProductAttribute::getId).collect(Collectors.toList());
+            PmsProductAttributeValueExample attributeValueExample = new PmsProductAttributeValueExample();
+            attributeValueExample.createCriteria().andProductIdEqualTo(product.getId())
+                    .andProductAttributeIdIn(attributeIds);
+            List<PmsProductAttributeValue> productAttributeValueList = productAttributeValueMapper.selectByExample(attributeValueExample);
+            result.setProductAttributeValueList(productAttributeValueList);
+        }
         //获取商品SKU库存信息
         PmsSkuStockExample skuExample = new PmsSkuStockExample();
         skuExample.createCriteria().andProductIdEqualTo(product.getId());
         List<PmsSkuStock> skuStockList = skuStockMapper.selectByExample(skuExample);
-        res.setSkuStockList(skuStockList);
+        result.setSkuStockList(skuStockList);
         //商品阶梯价格设置
         if(product.getPromotionType()==3){
             PmsProductLadderExample ladderExample = new PmsProductLadderExample();
             ladderExample.createCriteria().andProductIdEqualTo(product.getId());
             List<PmsProductLadder> productLadderList = productLadderMapper.selectByExample(ladderExample);
-            res.setProductLadderList(productLadderList);
+            result.setProductLadderList(productLadderList);
         }
         //商品满减价格设置
         if(product.getPromotionType()==4){
             PmsProductFullReductionExample fullReductionExample = new PmsProductFullReductionExample();
             fullReductionExample.createCriteria().andProductIdEqualTo(product.getId());
             List<PmsProductFullReduction> productFullReductionList = productFullReductionMapper.selectByExample(fullReductionExample);
-            res.setProductFullReductionList(productFullReductionList);
+            result.setProductFullReductionList(productFullReductionList);
         }
         //商品可用优惠券
-        res.setCouponList(portalProductDao.getAvailableCouponList(product.getId(),product.getProductCategoryId()));
-        return res;
+        result.setCouponList(portalProductDao.getAvailableCouponList(product.getId(),product.getProductCategoryId()));
+        return result;
     }
 
     /**

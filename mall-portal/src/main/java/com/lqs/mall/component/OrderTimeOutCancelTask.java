@@ -5,11 +5,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 /**
  * 订单超时后自动取消 并 解锁库存 的定时任务
  * Created by 刘千山 on 2023/7/5/005-11:30
  */
+@Component
 public class OrderTimeOutCancelTask {
     private final Logger LOGGER = LoggerFactory.getLogger(OrderTimeOutCancelTask.class);
 

@@ -1,6 +1,7 @@
 package com.lqs.mall.service.impl;
 
 import com.lqs.mall.common.service.RedisService;
+import com.lqs.mall.mall.annotation.CacheException;
 import com.lqs.mall.mapper.UmsMemberMapper;
 import com.lqs.mall.model.UmsMember;
 import com.lqs.mall.service.UmsMemberCacheService;
@@ -29,12 +30,14 @@ public class UmsMemberCacheServiceImpl implements UmsMemberCacheService {
     @Value("${redis.key.authCode}")
     private String REDIS_KEY_AUTH_CODE;
 
+    @CacheException
     @Override
     public String getAuthCode(String telephone) {
         String key = REDIS_DATABASE + ":" + REDIS_KEY_AUTH_CODE + ":" + telephone;
         return (String) redisService.get(key);
     }
 
+    @CacheException
     @Override
     public void setAuthCode(String telephone, String authCode) {
         String key = REDIS_DATABASE + ":" + REDIS_KEY_AUTH_CODE + ":" + telephone;

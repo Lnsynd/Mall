@@ -10,7 +10,7 @@
         <collection property="categoryRelationList" columnPrefix="cpcr_" resultMap="com.lqs.mall.mapper.SmsCouponProductCategoryRelationMapper.BaseResultMap">
         </collection>
     </resultMap>
-    <select id="getDetailList" resultType="com.lqs.mall.domain.SmsCouponHistoryDetail">
+    <select id="getDetailList" resultMap="couponHistoryDetailMap">
         SELECT
             ch.*,
             c.id c_id,
@@ -33,7 +33,7 @@
         WHERE ch.member_id = #{memberId}
           AND ch.use_status = 0
     </select>
-    <select id="getCouponList" resultType="com.lqs.mall.model.SmsCoupon">
+    <select id="getCouponList" resultMap="com.lqs.mall.mapper.SmsCouponMapper.BaseResultMap">
         SELECT
         c.*
         FROM
