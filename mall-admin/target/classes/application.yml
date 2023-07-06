@@ -48,3 +48,4 @@ secure:
       - /admin/register
       - /admin/info
       - /admin/logout
+      - /minio/upload
